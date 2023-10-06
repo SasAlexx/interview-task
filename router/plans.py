@@ -12,6 +12,6 @@ async def upload_file(file: UploadFile, db: Session = Depends(get_db)):
     return PlanService.upload_plan(file, db)
 
 
-@router.get('/plans_perfomance', tags=['plans_perfomance'])
-async def get_plan_info(period: str, db: Session = Depends(get_db)):
-    return PlansPerfomanceService.plans_perfomance(period, db)
+@router.get('/plans_perfomance', tags=['plans_perfomance'], description='method expects a date in the form "DD.MM.YYYY"')
+async def get_plan_info(date: str, db: Session = Depends(get_db)):
+    return PlansPerfomanceService.plans_perfomance(date, db)

@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_URL = "mysql+mysqlconnector://root:220302@localhost/task_db"
+SQLALCHEMY_URL = "mysql+mysqlconnector://root:220302@localhost/new_task_db"
 
 engine = create_engine(SQLALCHEMY_URL)
 SessionLocal = sessionmaker(autoflush=False, bind=engine)

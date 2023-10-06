@@ -16,31 +16,28 @@ def upload_plan(file: UploadFile, db: Session):
 
     data = file.file.read()
     obj = pd.read_excel(BytesIO(data)).to_records()
-    print(obj)
+    # print(obj)
     categories = {"видача": 3, "збір": 4}
 
     for x in obj:
         date_obj = pd.to_datetime(x[1]).date()
         plan_date = date_obj.strftime("%d.%m.%Y")
+        # print(plan_date)
         if plan_date.split('.')[0] != '01':
             raise HTTPException(status_code=404, detail="Date must start with 01!")
-        print(plan_date.split('.')[0])
         try:
             plan_sum = int(x[3])
         except:
             raise HTTPException(status_code=404, detail="Wrong format of sum!! Sum can't be empty!")
         plan_category = categories[x[2].lower()]
 
-        existing_plans = db.query(Plan.period).filter(plan_category == Plan.category_id).all()
-        existing_plans = [plan[0] for plan in existing_plans]
-
-        if plan_date in existing_plans:
+        existing_plans = db.query(Plan).filter(plan_category == Plan.category_id).all()
+        existing_plans = [plan.period for plan in existing_plans]
+        if date_obj in existing_plans:
             raise HTTPException(status_code=404, detail="Same plan already exists!")
 
-        print(plan_date, plan_sum, plan_category)
-
         plan = Plan(
-            period=plan_date,
+            period=date_obj,
             sum=plan_sum,
             category_id=plan_category)
 
